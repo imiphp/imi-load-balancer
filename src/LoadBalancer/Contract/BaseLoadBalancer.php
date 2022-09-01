@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Imi\Service\LoadBalancer\Contract;
 
+use Imi\Service\Contract\IService;
 use Imi\Util\ArrayList;
 
 abstract class BaseLoadBalancer implements ILoadBalancer
