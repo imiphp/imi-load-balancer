@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Imi\LoadBalancer\Test;
+namespace Imi\Service\Test\LoadBalancer;
 
-use Imi\LoadBalancer\Contract\ILoadBalancer;
-use Imi\LoadBalancer\Contract\IService;
-use Imi\LoadBalancer\Service;
+use Imi\Service\Contract\IService;
+use Imi\Service\LoadBalancer\Contract\ILoadBalancer;
+use Imi\Service\Service;
 use Imi\Util\ArrayList;
 use PHPUnit\Framework\TestCase;
 

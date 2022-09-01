@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Imi\LoadBalancer;
+namespace Imi\Service\LoadBalancer;
 
-use Imi\LoadBalancer\Contract\BaseLoadBalancer;
-use Imi\LoadBalancer\Contract\IService;
+use Imi\Service\Contract\IService;
+use Imi\Service\LoadBalancer\Contract\BaseLoadBalancer;
 
 /**
  * 随机-负载均衡

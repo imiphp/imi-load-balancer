@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Imi\LoadBalancer;
+namespace Imi\Service;
 
-use Imi\LoadBalancer\Contract\IService;
+use Imi\Service\Contract\IService;
 use Imi\Util\Uri;
 
 /**

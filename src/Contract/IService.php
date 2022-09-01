@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Imi\LoadBalancer\Contract;
+namespace Imi\Service\Contract;
 
 use Imi\Util\Uri;
 
