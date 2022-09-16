@@ -149,7 +149,7 @@ class ServiceRegistry
         {
             if ($ips)
             {
-                return reset($ips);
+                return reset($ips) ?: '';
             }
             else
             {
@@ -166,5 +166,7 @@ class ServiceRegistry
         {
             return $ips[$interface];
         }
+
+        return '';
     }
 }
