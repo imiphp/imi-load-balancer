@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Imi\Service\LoadBalancer;
+namespace Imi\Service;
 
 use Imi\Main\BaseMain;
 

@@ -12,9 +12,7 @@
             <file>tests/ServiceTest.php</file>
         </testsuite>
         <testsuite name="loadBalancer">
-            <file>tests/LoadBalancer/RandomLoadBalancerTest.php</file>
-            <file>tests/LoadBalancer/RoundRobinLoadBalancerTest.php</file>
-            <file>tests/LoadBalancer/WeightLoadBalancerTest.php</file>
+            <directory>tests/LoadBalancer</directory>
         </testsuite>
     </testsuites>
 </phpunit>
