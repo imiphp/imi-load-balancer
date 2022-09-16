@@ -51,6 +51,8 @@ class ServiceRegistry
      */
     protected float $failedSleep = 10;
 
+    private array $driverServices = [];
+
     /**
      * Get 驱动列表.
      */
@@ -62,17 +64,24 @@ class ServiceRegistry
     /**
      * 自动注册.
      */
-    public function autoRegister(): void
+    public function register(): void
     {
         $servers = ServerManager::getServers();
         while (true)
         {
             try
             {
-                foreach ($this->drivers as $driverConfig)
+                foreach ($this->drivers as $index => $driverConfig)
                 {
+                    if (isset($this->driverServices[$index]))
+                    {
+                        continue;
+                    }
+                    $driverServicesItem = [
+                        'services' => [],
+                    ];
                     /** @var IServiceRegistry $driver */
-                    $driver = new $driverConfig['driver']($driverConfig);
+                    $driverServicesItem['driver'] = $driver = new $driverConfig['driver']($driverConfig);
                     if ($servicesConfig = $driverConfig['services'] ?? [])
                     {
                         foreach ($servicesConfig as $value)
@@ -91,16 +100,17 @@ class ServiceRegistry
                             {
                                 continue;
                             }
-                            $driver->register($this->makeService($servers[$serverName], $serverConfig));
+                            $driver->register($driverServicesItem['services'][] = $this->makeService($servers[$serverName], $serverConfig));
                         }
                     }
                     else
                     {
                         foreach ($servers as $server)
                         {
-                            $driver->register($this->makeService($server));
+                            $driver->register($driverServicesItem['services'][] = $this->makeService($server));
                         }
                     }
+                    $this->driverServices[$index] = $driverServicesItem;
                 }
                 break;
             }
@@ -109,6 +119,19 @@ class ServiceRegistry
                 Log::error($th);
                 Log::warning(sprintf('Service registration failed, wait %.3f seconds and retry automatically', $this->failedSleep));
                 usleep((int) ($this->failedSleep * 1000_000));
+            }
+        }
+    }
+
+    public function deregister(): void
+    {
+        $driverServices = $this->driverServices;
+        $this->driverServices = [];
+        foreach ($driverServices as $driverServicesItem)
+        {
+            foreach ($driverServicesItem['services'] as $service)
+            {
+                $driverServicesItem['driver']->deregister($service);
             }
         }
     }

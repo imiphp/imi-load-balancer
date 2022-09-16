@@ -15,4 +15,9 @@ interface IServiceRegistry
      * 注册服务
      */
     public function register(IService $service): void;
+
+    /**
+     * 注销服务
+     */
+    public function deregister(IService $service): void;
 }

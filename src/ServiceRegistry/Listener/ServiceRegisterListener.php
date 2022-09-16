@@ -11,9 +11,9 @@ use Imi\Event\IEventListener;
 use Imi\Util\Imi;
 
 /**
- * @Listener("IMI.APP.INIT")
+ * @Listener("IMI.MAIN_SERVER.WORKER.START")
  */
-class ServiceRegistryListener implements IEventListener
+class ServiceRegisterListener implements IEventListener
 {
     /**
      * 事件处理方法.
@@ -21,13 +21,13 @@ class ServiceRegistryListener implements IEventListener
     public function handle(EventParam $e): void
     {
         if (!(
-            'IMI.APP.INIT' === $e->getEventName() && (Imi::checkAppType('swoole') || Imi::checkAppType('workerman')) // swoole、workerman
+            (Imi::checkAppType('swoole') || Imi::checkAppType('workerman')) // swoole、workerman
         ))
         {
             return;
         }
         /** @var \Imi\Service\ServiceRegistry\ServiceRegistry $serviceRegistry */
         $serviceRegistry = App::getBean('ServiceRegistry');
-        $serviceRegistry->autoRegister();
+        $serviceRegistry->register();
     }
 }
