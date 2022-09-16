@@ -11,7 +11,7 @@ use Imi\Event\IEventListener;
 use Imi\Util\Imi;
 
 /**
- * @Listener("IMI.MAIN_SERVER.WORKER.START")
+ * @Listener("IMI.SERVER.WORKER_START")
  */
 class ServiceRegisterListener implements IEventListener
 {
