@@ -17,8 +17,8 @@ abstract class BaseLoadBalancerTest extends TestCase
     public function test(): void
     {
         $services = new ArrayList(IService::class, [
-            new Service('a', 'imi', 'tcp://127.0.0.1:10001', 1, ['id' => 'a']),
-            new Service('b', 'imi', 'tcp://127.0.0.1:10002', 2, ['id' => 'b']),
+            new Service('a', 'imi', 'tcp://127.0.0.1:10001', 0.1, ['id' => 'a']),
+            new Service('b', 'imi', 'tcp://127.0.0.1:10002', 0.2, ['id' => 'b']),
         ]);
         /** @var ILoadBalancer $loadBalancer */
         $loadBalancer = new $this->class($services);

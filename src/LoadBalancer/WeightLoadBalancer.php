@@ -38,6 +38,6 @@ class WeightLoadBalancer extends BaseLoadBalancer
             }
         }
 
-        return null;
+        return $service ?? null;
     }
 }
