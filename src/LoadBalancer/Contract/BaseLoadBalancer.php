@@ -19,6 +19,11 @@ abstract class BaseLoadBalancer implements ILoadBalancer
      */
     public function __construct(ArrayList $services)
     {
+        $this->setServices($services);
+    }
+
+    public function setServices(ArrayList $services): void
+    {
         $this->services = $services;
     }
 
