@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Imi\Service\LoadBalancer\Contract;
 
 use Imi\Service\Contract\IService;
-use Imi\Util\ArrayList;
+use Imi\Service\Discovery\Contract\IDiscoveryClient;
 
 /**
  * 负载均衡接口.
@@ -13,9 +13,11 @@ use Imi\Util\ArrayList;
 interface ILoadBalancer
 {
     /**
-     * @return ArrayList<IService>
+     * @return IService[]
      */
-    public function getServices(): ArrayList;
+    public function getServices(): array;
+
+    public function getDiscoveryClient(): ?IDiscoveryClient;
 
     public function choose(): ?IService;
 }

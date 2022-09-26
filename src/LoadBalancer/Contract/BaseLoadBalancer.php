@@ -5,33 +5,49 @@ declare(strict_types=1);
 namespace Imi\Service\LoadBalancer\Contract;
 
 use Imi\Service\Contract\IService;
-use Imi\Util\ArrayList;
+use Imi\Service\Discovery\Contract\IDiscoveryClient;
 
 abstract class BaseLoadBalancer implements ILoadBalancer
 {
     /**
-     * @var ArrayList<IService>
+     * @var IService[]
      */
-    protected ArrayList $services;
+    private array $services = [];
+
+    private ?IDiscoveryClient $discoveryClient = null;
 
     /**
-     * @param ArrayList<IService> $services
+     * @param IService[]|IDiscoveryClient $services
      */
-    public function __construct(ArrayList $services)
+    public function __construct($services)
     {
-        $this->setServices($services);
-    }
-
-    public function setServices(ArrayList $services): void
-    {
-        $this->services = $services;
+        if ($services instanceof IDiscoveryClient)
+        {
+            $this->discoveryClient = $services;
+        }
+        else
+        {
+            $this->services = $services;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getServices(): ArrayList
+    public function getServices(): array
     {
-        return $this->services;
+        if ($this->discoveryClient)
+        {
+            return $this->discoveryClient->getServices();
+        }
+        else
+        {
+            return $this->services;
+        }
+    }
+
+    public function getDiscoveryClient(): ?IDiscoveryClient
+    {
+        return $this->discoveryClient;
     }
 }

@@ -15,8 +15,9 @@ class WeightLoadBalancer extends BaseLoadBalancer
 {
     public function choose(): ?IService
     {
+        $services = $this->getServices();
         $weightSum = 0;
-        foreach ($this->services as $service)
+        foreach ($services as $service)
         {
             $weight = $service->getWeight();
             if ($weight > 0)
@@ -29,7 +30,7 @@ class WeightLoadBalancer extends BaseLoadBalancer
             return null;
         }
         $randomValue = Random::number(1, $weightSum);
-        foreach ($this->services as $service)
+        foreach ($services as $service)
         {
             $randomValue -= $service->getWeight();
             if ($randomValue <= 0)
