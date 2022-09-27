@@ -31,6 +31,7 @@ class ServiceDiscovery
      *     'client' => [
      *         // 注册中心客户端连接配置，每个驱动不同
      *     ],
+     *     'cacheTTL' => 60, // 缓存时间，单位：秒。默认为60秒，设为0不启用缓存
      * ]].
      */
     protected array $drivers = [];
@@ -93,9 +94,8 @@ class ServiceDiscovery
         {
             throw new \RuntimeException('ServiceDiscovery Missing configuration entry driver');
         }
-        $driver = $configItem['driver'];
 
-        return $this->discoveryClients[$serviceId] = App::newInstance($driver, $configItem['client'] ?? []);
+        return $this->discoveryClients[$serviceId] = App::newInstance($configItem['driver'], $configItem);
     }
 
     /**
@@ -111,9 +111,10 @@ class ServiceDiscovery
         {
             throw new \RuntimeException(sprintf('Service [%s] does not exist', $serviceId));
         }
-        $class = $this->drivers[$this->serviceDriverIndexMap[$serviceId]]['client'] ?? DiscoveryClient::class;
+        $configItem = $this->drivers[$this->serviceDriverIndexMap[$serviceId]];
+        $class = $configItem['client'] ?? DiscoveryClient::class;
 
-        return $this->discoveryClients[$serviceId] = App::newInstance($serviceId, $this->getDiscoveryDriver($serviceId));
+        return $this->discoveryClients[$serviceId] = App::newInstance($class, $this->getDiscoveryDriver($serviceId), $configItem);
     }
 
     /**
