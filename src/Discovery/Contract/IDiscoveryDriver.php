@@ -7,14 +7,12 @@ namespace Imi\Service\Discovery\Contract;
 use Imi\Service\Contract\IService;
 
 /**
- * 服务发现客户端接口.
+ * 服务发现驱动接口.
  */
-interface IDiscoveryClient
+interface IDiscoveryDriver
 {
-    public function getServiceId(): string;
-
     /**
      * @return IService[]
      */
-    public function getInstances(): array;
+    public function getInstances(string $serviceId): array;
 }

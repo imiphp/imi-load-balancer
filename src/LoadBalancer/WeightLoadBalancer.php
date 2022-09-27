@@ -15,7 +15,7 @@ class WeightLoadBalancer extends BaseLoadBalancer
 {
     public function choose(): ?IService
     {
-        $services = $this->getServices();
+        $services = $this->getInstances();
         $weightSum = 0;
         foreach ($services as $service)
         {

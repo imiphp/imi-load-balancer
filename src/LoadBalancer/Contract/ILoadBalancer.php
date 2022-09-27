@@ -15,7 +15,7 @@ interface ILoadBalancer
     /**
      * @return IService[]
      */
-    public function getServices(): array;
+    public function getInstances(): array;
 
     public function getDiscoveryClient(): ?IDiscoveryClient;
 

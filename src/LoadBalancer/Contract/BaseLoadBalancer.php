@@ -34,11 +34,11 @@ abstract class BaseLoadBalancer implements ILoadBalancer
     /**
      * {@inheritDoc}
      */
-    public function getServices(): array
+    public function getInstances(): array
     {
         if ($this->discoveryClient)
         {
-            return $this->discoveryClient->getServices();
+            return $this->discoveryClient->getInstances();
         }
         else
         {

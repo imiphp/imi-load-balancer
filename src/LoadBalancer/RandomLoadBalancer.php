@@ -14,7 +14,7 @@ class RandomLoadBalancer extends BaseLoadBalancer
 {
     public function choose(): ?IService
     {
-        if (($count = \count($services = $this->getServices())) > 0)
+        if (($count = \count($services = $this->getInstances())) > 0)
         {
             return $services[mt_rand(0, $count - 1)] ?? null;
         }

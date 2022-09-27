@@ -19,3 +19,4 @@ parameters:
 
     ignoreErrors:
         - '#expects class-string<\S+>, string given#'
+        - '#Unable to resolve the template type T in call to method#'

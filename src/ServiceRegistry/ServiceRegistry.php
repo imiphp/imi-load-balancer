@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Imi\Service\ServiceRegistry;
 
+use Imi\App;
 use Imi\Bean\Annotation\Bean;
 use Imi\Log\Log;
 use Imi\Server\Contract\IServer;
@@ -81,7 +82,7 @@ class ServiceRegistry
                         'services' => [],
                     ];
                     /** @var IServiceRegistry $driver */
-                    $driverServicesItem['driver'] = $driver = new $driverConfig['driver']($driverConfig);
+                    $driverServicesItem['driver'] = $driver = App::newInstance($driverConfig['driver'], $driverConfig);
                     if ($servicesConfig = $driverConfig['services'] ?? [])
                     {
                         foreach ($servicesConfig as $value)

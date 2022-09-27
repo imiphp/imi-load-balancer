@@ -4,29 +4,34 @@ declare(strict_types=1);
 
 namespace Imi\Service\Discovery;
 
-use Imi\Service\Contract\IService;
 use Imi\Service\Discovery\Contract\IDiscoveryClient;
+use Imi\Service\Discovery\Contract\IDiscoveryDriver;
 
 /**
  * 服务发现客户端.
  */
 class DiscoveryClient implements IDiscoveryClient
 {
-    /**
-     * @var IService[]
-     */
-    private array $services;
+    private string $serviceId = '';
 
-    public function __construct(array $services)
+    private IDiscoveryDriver $driver;
+
+    public function __construct(string $serviceId, IDiscoveryDriver $driver)
     {
-        $this->services = $services;
+        $this->serviceId = $serviceId;
+        $this->driver = $driver;
+    }
+
+    public function getServiceId(): string
+    {
+        return $this->serviceId;
     }
 
     /**
-     * @return IService[]
+     * {@inheritDoc}
      */
-    public function getServices(): array
+    public function getInstances(): array
     {
-        return $this->services;
+        return $this->driver->getInstances($this->serviceId);
     }
 }

@@ -7,6 +7,7 @@ namespace Imi\Service\Test\LoadBalancer;
 use Imi\Service\Discovery\DiscoveryClient;
 use Imi\Service\LoadBalancer\Contract\ILoadBalancer;
 use Imi\Service\Service;
+use Imi\Service\Test\TestDiscoveryDriver;
 use PHPUnit\Framework\TestCase;
 
 abstract class BaseLoadBalancerTest extends TestCase
@@ -22,7 +23,7 @@ abstract class BaseLoadBalancerTest extends TestCase
         /** @var ILoadBalancer $loadBalancer */
         $loadBalancer = new $this->class($originServices);
 
-        $this->assertEquals($originServices, $loadBalancer->getServices());
+        $this->assertEquals($originServices, $loadBalancer->getInstances());
 
         $service = $loadBalancer->choose();
         $this->assertNotNull($service);
@@ -30,15 +31,15 @@ abstract class BaseLoadBalancerTest extends TestCase
         /** @var ILoadBalancer $loadBalancer */
         $loadBalancer = new $this->class([]);
 
-        $this->assertEquals([], $loadBalancer->getServices());
+        $this->assertEquals([], $loadBalancer->getInstances());
 
         $service = $loadBalancer->choose();
         $this->assertNull($service);
 
         /** @var ILoadBalancer $loadBalancer */
-        $loadBalancer = new $this->class(new DiscoveryClient($originServices));
+        $loadBalancer = new $this->class(new DiscoveryClient('', new TestDiscoveryDriver($originServices)));
 
-        $this->assertEquals($originServices, $loadBalancer->getServices());
+        $this->assertEquals($originServices, $loadBalancer->getInstances());
 
         $service = $loadBalancer->choose();
         $this->assertNotNull($service);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Imi\Service\LoadBalancer\Test;
+namespace Imi\Service\Test;
 
 use Imi\Service\Service;
 use Imi\Util\Uri;

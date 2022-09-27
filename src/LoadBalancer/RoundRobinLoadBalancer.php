@@ -20,7 +20,7 @@ class RoundRobinLoadBalancer extends BaseLoadBalancer
     public function __construct($services)
     {
         parent::__construct($services);
-        if (($count = \count($this->getServices())) > 0)
+        if (($count = \count($this->getInstances())) > 0)
         {
             $this->position = mt_rand(0, $count - 1);
         }
@@ -28,7 +28,7 @@ class RoundRobinLoadBalancer extends BaseLoadBalancer
 
     public function choose(): ?IService
     {
-        $maxIndex = \count($services = $this->getServices()) - 1;
+        $maxIndex = \count($services = $this->getInstances()) - 1;
         $position = &$this->position;
         if (++$position > $maxIndex)
         {
