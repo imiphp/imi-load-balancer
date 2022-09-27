@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Imi\Service\Discovery;
 
+use Imi\Service\Contract\IService;
 use Imi\Service\Discovery\Contract\IDiscoveryClient;
 use Imi\Service\Discovery\Contract\IDiscoveryDriver;
 
