@@ -8,6 +8,7 @@ use Imi\App;
 use Imi\Bean\Annotation\Bean;
 use Imi\Service\Contract\IService;
 use Imi\Service\Discovery\Contract\IDiscoveryClient;
+use Imi\Service\Discovery\Contract\IDiscoveryDriver;
 use Imi\Service\LoadBalancer\Contract\ILoadBalancer;
 use Imi\Service\LoadBalancer\RandomLoadBalancer;
 
@@ -79,7 +80,7 @@ class ServiceDiscovery
     /**
      * 获取服务发现驱动.
      */
-    public function getDiscoveryDriver(string $serviceId): IDiscoveryClient
+    public function getDiscoveryDriver(string $serviceId): IDiscoveryDriver
     {
         if (isset($this->discoveryClients[$serviceId]))
         {
@@ -114,7 +115,7 @@ class ServiceDiscovery
         $configItem = $this->drivers[$this->serviceDriverIndexMap[$serviceId]];
         $class = $configItem['client'] ?? DiscoveryClient::class;
 
-        return $this->discoveryClients[$serviceId] = App::newInstance($class, $this->getDiscoveryDriver($serviceId), $configItem);
+        return $this->discoveryClients[$serviceId] = App::newInstance($class, $serviceId, $this->getDiscoveryDriver($serviceId), $configItem);
     }
 
     /**
