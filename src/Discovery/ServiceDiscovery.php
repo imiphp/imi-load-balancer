@@ -40,6 +40,11 @@ class ServiceDiscovery
     private array $serviceDriverIndexMap = [];
 
     /**
+     * @var IDiscoveryDriver[]
+     */
+    private array $discoveryDrivers = [];
+
+    /**
      * @var IDiscoveryClient[]
      */
     private array $discoveryClients = [];
@@ -82,9 +87,9 @@ class ServiceDiscovery
      */
     public function getDiscoveryDriver(string $serviceId): IDiscoveryDriver
     {
-        if (isset($this->discoveryClients[$serviceId]))
+        if (isset($this->discoveryDrivers[$serviceId]))
         {
-            return $this->discoveryClients[$serviceId];
+            return $this->discoveryDrivers[$serviceId];
         }
         if (!isset($this->serviceDriverIndexMap[$serviceId]))
         {
@@ -96,7 +101,7 @@ class ServiceDiscovery
             throw new \RuntimeException('ServiceDiscovery Missing configuration entry driver');
         }
 
-        return $this->discoveryClients[$serviceId] = App::newInstance($configItem['driver'], $configItem);
+        return $this->discoveryDrivers[$serviceId] = App::newInstance($configItem['driver'], $configItem);
     }
 
     /**
