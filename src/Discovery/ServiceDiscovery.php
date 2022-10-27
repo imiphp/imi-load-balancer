@@ -6,6 +6,7 @@ namespace Imi\Service\Discovery;
 
 use Imi\App;
 use Imi\Bean\Annotation\Bean;
+use Imi\RequestContext;
 use Imi\Service\Contract\IService;
 use Imi\Service\Discovery\Contract\IDiscoveryClient;
 use Imi\Service\Discovery\Contract\IDiscoveryDriver;
@@ -38,21 +39,6 @@ class ServiceDiscovery
     protected array $drivers = [];
 
     private array $serviceDriverIndexMap = [];
-
-    /**
-     * @var IDiscoveryDriver[]
-     */
-    private array $discoveryDrivers = [];
-
-    /**
-     * @var IDiscoveryClient[]
-     */
-    private array $discoveryClients = [];
-
-    /**
-     * @var ILoadBalancer[]
-     */
-    private array $loadBalancers = [];
 
     public function __construct(array $drivers = [])
     {
@@ -87,9 +73,10 @@ class ServiceDiscovery
      */
     public function getDiscoveryDriver(string $serviceId): IDiscoveryDriver
     {
-        if (isset($this->discoveryDrivers[$serviceId]))
+        $context = RequestContext::getContext();
+        if (isset($context[self::class]['discoveryDrivers'][$serviceId]))
         {
-            return $this->discoveryDrivers[$serviceId];
+            return $context[self::class]['discoveryDrivers'][$serviceId];
         }
         if (!isset($this->serviceDriverIndexMap[$serviceId]))
         {
@@ -101,7 +88,7 @@ class ServiceDiscovery
             throw new \RuntimeException('ServiceDiscovery Missing configuration entry driver');
         }
 
-        return $this->discoveryDrivers[$serviceId] = App::newInstance($configItem['driver'], $configItem);
+        return $context[self::class]['discoveryDrivers'][$serviceId] = App::newInstance($configItem['driver'], $configItem);
     }
 
     /**
@@ -109,9 +96,10 @@ class ServiceDiscovery
      */
     public function getDiscoveryClient(string $serviceId): IDiscoveryClient
     {
-        if (isset($this->discoveryClients[$serviceId]))
+        $context = RequestContext::getContext();
+        if (isset($context[self::class]['discoveryClients'][$serviceId]))
         {
-            return $this->discoveryClients[$serviceId];
+            return $context[self::class]['discoveryClients'][$serviceId];
         }
         if (!isset($this->serviceDriverIndexMap[$serviceId]))
         {
@@ -120,7 +108,7 @@ class ServiceDiscovery
         $configItem = $this->drivers[$this->serviceDriverIndexMap[$serviceId]];
         $class = $configItem['client'] ?? DiscoveryClient::class;
 
-        return $this->discoveryClients[$serviceId] = App::newInstance($class, $serviceId, $this->getDiscoveryDriver($serviceId), $configItem);
+        return $context[self::class]['discoveryClients'][$serviceId] = App::newInstance($class, $serviceId, $this->getDiscoveryDriver($serviceId), $configItem);
     }
 
     /**
@@ -128,13 +116,14 @@ class ServiceDiscovery
      */
     public function getLoadBalancer(string $serviceId): ILoadBalancer
     {
-        if (isset($this->loadBalancers[$serviceId]))
+        $context = RequestContext::getContext();
+        if (isset($context[self::class]['loadBalancers'][$serviceId]))
         {
-            return $this->loadBalancers[$serviceId];
+            return $context[self::class]['loadBalancers'][$serviceId];
         }
         $loadBalancer = $this->drivers[$this->serviceDriverIndexMap[$serviceId]]['loadBalancer'] ?? RandomLoadBalancer::class;
 
-        return $this->loadBalancers[$serviceId] = App::newInstance($loadBalancer, $this->getDiscoveryClient($serviceId));
+        return $context[self::class]['loadBalancers'][$serviceId] = App::newInstance($loadBalancer, $this->getDiscoveryClient($serviceId));
     }
 
     /**
