@@ -121,6 +121,10 @@ class ServiceDiscovery
         {
             return $context[self::class]['loadBalancers'][$serviceId];
         }
+        if (!isset($this->serviceDriverIndexMap[$serviceId]))
+        {
+            throw new \RuntimeException(sprintf('Service [%s] does not exist', $serviceId));
+        }
         $loadBalancer = $this->drivers[$this->serviceDriverIndexMap[$serviceId]]['loadBalancer'] ?? RandomLoadBalancer::class;
 
         return $context[self::class]['loadBalancers'][$serviceId] = App::newInstance($loadBalancer, $this->getDiscoveryClient($serviceId));
